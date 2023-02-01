@@ -1,12 +1,7 @@
-import { Application } from "https://deno.land/x/oak/mod.ts";
+import { Application } from 'https://deno.land/x/abc/mod.ts'
 
-const app = new Application();
+const app = new Application()
 
-// Send static content
-app.use(async context => {
-  await send(context, context.request.path, {
-    root: `${Deno.cwd()}`,
-    index: "index.html"
-  });
-});
-await app.listen({ port: 8000 });
+app.static('/static', 'assets')
+
+app.get('/hello', (c) => 'Hello!').start({ port: 8080 })
