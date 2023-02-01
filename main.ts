@@ -1,9 +1,4 @@
-import {
-  Application,
-  HttpError,
-  send,
-  Status
-} from "https://deno.land/x/oak/mod.ts";
+import { Application } from "https://deno.land/x/oak/mod.ts";
 
 const app = new Application();
 
@@ -53,4 +48,4 @@ app.use(async context => {
 
 const address = "127.0.0.1:8000";
 console.log(bold("Start listening on ") + yellow(address));
-await app.listen(address);
+await app.listen({ port: 8000 });
