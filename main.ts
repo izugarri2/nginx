@@ -1,7 +1,14 @@
-import { Application } from 'https://deno.land/x/abc/mod.ts'
+import * as exp from 'https://raw.githubusercontent.com/NMathar/deno-express/master/mod.ts'
 
-const app = new Application()
+const port = 3000
+const app = new exp.App()
 
-app.static('/static', 'assets')
+app.use(exp.static_('./public'))
+app.use(exp.bodyParser.json())
 
-app.get('/hello', (c) => 'Hello!').start({ port: 8080 })
+app.get('/api/todos', async (req, res) => {
+  await res.json([{ name: 'Buy some milk' }])
+})
+
+const server = await app.listen(port)
+console.log(`app listening on port ${server.port}`)
