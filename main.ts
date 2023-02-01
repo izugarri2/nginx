@@ -1,10 +1,4 @@
-import {
-  green,
-  cyan,
-  bold,
-  yellow,
-  red
-} from "https://deno.land/std@v0.20.0/fmt/colors.ts";
+import { Server } from "https://deno.land/std@0.175.0/http/server.ts";
 
 import {
   Application,
