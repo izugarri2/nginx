@@ -8,8 +8,5 @@ app.use(async context => {
     root: `${Deno.cwd()}/static`,
     index: "index.html"
   });
-});
 
-const address = "127.0.0.1:8000";
-console.log(bold("Start listening on ") + yellow(address));
 await app.listen({ port: 8000 });
