@@ -38,25 +38,6 @@ app.use(async (context, next) => {
   }
 });
 
-// Logger
-app.use(async (context, next) => {
-  await next();
-  const rt = context.response.headers.get("X-Response-Time");
-  console.log(
-    `${(context.request.method)} ${(context.request.url)} - ${(
-      String(rt)
-    )}`
-  );
-});
-
-// Response Time
-app.use(async (context, next) => {
-  const start = Date.now();
-  await next();
-  const ms = Date.now() - start;
-  context.response.headers.set("X-Response-Time", `${ms}ms`);
-});
-
 // Send static content
 app.use(async context => {
   await send(context, context.request.path, {
@@ -65,5 +46,4 @@ app.use(async context => {
   });
 });
 
-const address = "127.0.0.1:8000";
-await app.listen(address);
+await app.listen({ port: 8000 });
