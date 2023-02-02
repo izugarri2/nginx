@@ -17,7 +17,7 @@ import {
   hasFlash,
   HttpError,
   Status,
-} from "src/mod.ts";
+} from "./mod.ts";
 
 const app = new Application(
   hasFlash() ? { serverConstructor: FlashServer } : undefined,
