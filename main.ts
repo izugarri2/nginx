@@ -39,11 +39,11 @@ app.use(async (context, next) => {
 });
 
 // Send static content
-app.use(async context => {
-  await send(context, context.request.path, {
-    root: `${Deno.cwd()}`,
-    index: "index.html"
-  });
-});
+app.use(async (ctx) => {
+  try {
+    await ctx.send({
+      root: `${Deno.cwd()}`,
+      index: "index.html",
+    });
 
 await app.listen({ port: 8000 });
