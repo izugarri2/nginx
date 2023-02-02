@@ -84,7 +84,7 @@ app.use(async (context, next) => {
 // Send static content
 app.use(async (context) => {
   await context.send({
-    root: `${Deno.cwd()}/examples/static`,
+    root: `${Deno.cwd()}/static`,
     index: "index.html",
   });
 });
