@@ -7,7 +7,10 @@ app.use(async (ctx) => {
       root: `${Deno.cwd()}`,
       index: "index.html",
     });
-  } 
+  } catch {
+    ctx.response.status = 404;
+    ctx.response.body = "404 - No found - Página no encontrada";
+  }
 });
 
 await app.listen({ port: 8000 });
