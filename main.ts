@@ -1,27 +1,19 @@
-/*
- * This is an example of a server that will serve static content out of the
- * $CWD/examples/static path.
- */
-
 import {
-  bold,
-  cyan,
   green,
-  red,
+  cyan,
+  bold,
   yellow,
-} from "https://deno.land/std@0.152.0/fmt/colors.ts";
+  red
+} from "https://deno.land/std@0.176.0/fmt/colors.ts";
 
 import {
   Application,
-  FlashServer,
-  hasFlash,
   HttpError,
-  Status,
-} from "./mod.ts";
+  send,
+  Status
+} from "https://deno.land/x/oak/mod.ts";
 
-const app = new Application(
-  hasFlash() ? { serverConstructor: FlashServer } : undefined,
-);
+const app = new Application();
 
 // Error handler middleware
 app.use(async (context, next) => {
@@ -29,31 +21,30 @@ app.use(async (context, next) => {
     await next();
   } catch (e) {
     if (e instanceof HttpError) {
-      // deno-lint-ignore no-explicit-any
       context.response.status = e.status as any;
       if (e.expose) {
         context.response.body = `<!DOCTYPE html>
-            <html>
-              <body>
-                <h1>${e.status} - ${e.message}</h1>
-              </body>
-            </html>`;
+        <html>
+            <body>
+            <h1>${e.status} - ${e.message}</h1>
+            </body>
+        </html>`;
       } else {
         context.response.body = `<!DOCTYPE html>
-            <html>
-              <body>
-                <h1>${e.status} - ${Status[e.status]}</h1>
-              </body>
-            </html>`;
+        <html>
+            <body>
+            <h1>${e.status} - ${Status[e.status]}</h1>
+            </body>
+        </html>`;
       }
     } else if (e instanceof Error) {
       context.response.status = 500;
       context.response.body = `<!DOCTYPE html>
-            <html>
-              <body>
-                <h1>500 - Internal Server Error</h1>
-              </body>
-            </html>`;
+        <html>
+            <body>
+            <h1>500 - Internal Server Error</h1>
+            </body>
+        </html>`;
       console.log("Unhandled Error:", red(bold(e.message)));
       console.log(e.stack);
     }
@@ -65,11 +56,9 @@ app.use(async (context, next) => {
   await next();
   const rt = context.response.headers.get("X-Response-Time");
   console.log(
-    `${green(context.request.method)} ${cyan(context.request.url.pathname)} - ${
-      bold(
-        String(rt),
-      )
-    }`,
+    `${green(context.request.method)} ${cyan(context.request.url)} - ${bold(
+      String(rt)
+    )}`
   );
 });
 
@@ -82,18 +71,13 @@ app.use(async (context, next) => {
 });
 
 // Send static content
-app.use(async (context) => {
-  await context.send({
+app.use(async context => {
+  await send(context, context.request.path, {
     root: `${Deno.cwd()}/static`,
-    index: "index.html",
+    index: "index.html"
   });
 });
 
-app.addEventListener("listen", ({ hostname, port, serverType }) => {
-  console.log(
-    bold("Start listening on ") + yellow(`${hostname}:${port}`),
-  );
-  console.log(bold("  using HTTP server: " + yellow(serverType)));
-});
-
-await app.listen({ hostname: "127.0.0.1", port: 8000 });
+const address = "127.0.0.1:8000";
+console.log(bold("Start listening on ") + yellow(address));
+await app.listen(address);
