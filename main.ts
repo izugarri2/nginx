@@ -5,7 +5,7 @@ const app = new Application();
 
 // Send static content
 app.use(async => {
-  await {
+  try {
     root: `${Deno.cwd()}`,
     index: "index.html"
   };
