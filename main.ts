@@ -7,8 +7,8 @@ const app = new Application();
 app.use(async => {
   try {
     root: `${Deno.cwd()}`,
-    index: "index.html"
-  };
+    index: "index.html",
+  });
 });
 
 await app.listen({ port: 8000 });
