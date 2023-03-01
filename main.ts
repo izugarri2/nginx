@@ -1,16 +1,8 @@
-import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.116.0/http/server.ts";
+import staticFiles from "https://deno.land/x/static_files@1.1.6/mod.ts";
 
-const app = new Application();
-app.use(async (ctx) => {
-  try {
-    await ctx.send({
-      root: `${Deno.cwd()}`,
-      index: "index.html",
-    });
-  } catch {
-    ctx.response.status = 404;
-    ctx.response.body = "404 - No found - Página no encontrada";
-  }
-});
-
-await app.listen({ port: 8000 });
+const serveFiles = (req: Request) => staticFiles('./public/')({ 
+    request: req, 
+    respondWith: (r: Response) => r 
+})
+serve((req) => serveFiles(req), { addr: ':3000' });
